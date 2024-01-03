@@ -1,22 +1,24 @@
-const http=require('http');
+
 const express=require('express');
-const bodyParser=require('body-parser');
+const bodyParser = require('body-parser');
+
 const app=express();
 
+const adminRoutes = require('./routes/admin');
+const shopRoutes = require('./routes/shop');
 app.use(bodyParser.urlencoded({extended:false}));
-app.use('/add-product',(req,res,next)=>{
-   res.send('<form action="/product" method="post">Title:<input type="text" name="title"/>Size:<input type="text" name="size"/><button type="submit">Add Product</button></form>');
-   console.log('In Middleware');
+//FILTER PATHS;
+//app.use('/admin',adminRoutes);
+app.use(adminRoutes);
+//app.use(shopRoutes);
+app.use('/shop',shopRoutes);
+
+app.use((req,res,next)=>{
+    res.status(404).send('<h1>Page Not Found!!!!!</h1>');
 });
-app.use('/product',(req,res)=>{
-   console.log(req.body);
-    res.redirect('/');
-});
-app.use('/',(req,res)=>{
-   res.send('<h1>Hello from express</h1>');
-    console.log('In another Middleware');
-    
- });
-const server=http.createServer(app);
-server.listen(3000);
+//  const server=http.createServer(app);
+// console.log(route.someText);
+
+// const server=http.createServer(route.handler);
+ app.listen(3000);
 
